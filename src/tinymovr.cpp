@@ -17,6 +17,8 @@ uint8_t set_pos_setpoint_ep_id = 0x00C;
 uint8_t set_vel_setpoint_ep_id = 0x00D;
 uint8_t set_Iq_setpoint_ep_id = 0x00E;
 uint8_t reset_ep_id = 0x016;
+uint8_t set_motor_config_ep_id = 0x01F;
+uint8_t set_motor_RL_ep_id = 0x028;
 
 void Tinymovr::device_info(uint32_t *device_id, uint8_t *fw_major,
     uint8_t *fw_minor, uint8_t *fw_patch, uint8_t *temp
@@ -172,4 +174,19 @@ bool Tinymovr::recv(uint8_t cmd_id, uint8_t *data, uint8_t *data_size, uint16_t 
 uint8_t Tinymovr::get_arbitration_id(uint8_t cmd_id)
 {
     return this->can_node_id << ep_bits | cmd_id;
+}
+
+void Tinymovr::set_motor_config(uint8_t flags, uint8_t pole_pairs, float I_cal)
+{
+    write_le(flags, this->_data);
+    write_le(pole_pairs, this->_data + 1);
+    write_le(I_cal, this->_data + 2);
+    this->send(set_motor_config_ep_id, this->_data, 8, false);
+}
+
+void Tinymovr::set_motor_RL(float R, float L)
+{
+    write_le(R, this->_data);
+    write_le(L, this->_data + 4);
+    this->send(set_motor_RL_ep_id, this->_data, 8, false);
 }

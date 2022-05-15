@@ -60,6 +60,8 @@ class Tinymovr
     void set_pos_setpoint(float pos_setpoint, float vel_ff, float Iq_ff);
     void set_vel_setpoint(float vel_setpoint, float Iq_ff);
     void set_Iq_setpoint(float Iq_setpoint);
+    void set_motor_config(uint8_t flags, uint8_t pole_pairs, float I_cal);
+    void set_motor_RL(float R, float L);
 
     void reset();
 
